@@ -3,11 +3,35 @@ pipeline {
     stages {
         stage("verify loading"){
             steps {
-                sh '''
+                bat '''
                     docker version
                     docker info
                     docker compose version
-                    curl --verison
+                '''
+            }
+        }
+        
+        stage("Composing"){
+            steps {
+                bat '''
+                    docker compose build
+                '''
+            }
+        }
+        stage("Tagging"){
+            steps {
+                bat '''
+                    docker tag docker_compose-worker docker_compose-worker:v1
+                    docker tag docker_compose-api docker_compose-api:v1
+                '''
+            }
+        }
+        stage("Pushing to Hub"){
+            steps {
+                bat '''
+                    docker push docker_compose-api:v1
+                    docker push docker_compose-worker:v1
+                    docker push redis
                 '''
             }
         }
