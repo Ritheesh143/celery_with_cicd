@@ -1,0 +1,16 @@
+pipeline {
+    agent any
+    stages {
+        stage("verify loading"){
+            steps {
+                sh '''
+                    docker version
+                    docker info
+                    docker compose version
+                    curl --verison
+                    jq --version
+                '''
+            }
+        }
+    }
+}
